@@ -20,7 +20,8 @@
   "homepage": "https://github.com/jfeng2542/zendesk-coding-challenge#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "readline-sync": "^1.4.10"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
