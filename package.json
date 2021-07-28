@@ -1,0 +1,28 @@
+{
+  "name": "zendesk-coding-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfeng2542/zendesk-coding-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jfeng2542/zendesk-coding-challenge/issues"
+  },
+  "homepage": "https://github.com/jfeng2542/zendesk-coding-challenge#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
