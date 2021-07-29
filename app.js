@@ -20,15 +20,15 @@ async function main() {
         console.log('');
         switch(answer) {
             case 'menu':
-                console.log('Type \'1\' to view one ticket');
-                console.log('Type \'2\' to view all the tickets');
+                console.log('Type \'1\' to view all tickets');
+                console.log('Type \'2\' to view one tickets (but you\'ll need to know an ID)');
                 console.log('Type \'exit\' to quit');
                 break;
             case '1':
-                await TicketRequest.requestOneTicket(getRequestInput(readlineSync));
+                await TicketRequest.requestAllTickets(readlineSync);
                 break;
             case '2':
-                console.log('Wait, hold on, I don\'t actually know how to do this yet. Sorry, it\'s my first day :/');
+                await TicketRequest.requestOneTicket(getRequestInput(readlineSync));
                 break;
             case 'exit':
                 console.log('Bye, have a great day!');
