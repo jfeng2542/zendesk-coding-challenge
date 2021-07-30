@@ -23,7 +23,5 @@
     "node-fetch": "^2.6.1",
     "readline-sync": "^1.4.10"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.12"
-  }
+  "devDependencies": {}
 }
