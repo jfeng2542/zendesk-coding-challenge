@@ -5,24 +5,26 @@ async function main() {
     // Import required files
     const requester = require('./Requester/requester.js');
     const inputter = require('./Inputter/inputter.js');
+    const printer = require('./Printer/printer.js');
+    const consoleOutput = new printer();
 
     // Uses token for authorization
     dotenv.config({ path: '.env' });
     const TOKEN = process.env.ZENDESK_OAUTH_TOKEN;
-    const ticketRequest = new requester(TOKEN);
-    const consoleInput = new inputter(ticketRequest);
+    const ticketRequest = new requester(TOKEN,consoleOutput);
+    const consoleInput = new inputter(ticketRequest, consoleOutput);
 
     // Initialize variables that will be used within the loop
-    let answer, inputIsExit;
+    let answer;
+    let inputIsExit;
 
-    console.log('Hi! My name is Sam, the Ticket Viewer :D');
+    // Introduces the ticket viewer to user
+    consoleOutput.intro();
 
     // Loops until user inputs 'exit'
     do {
-        answer = consoleInput.askQuestion('Command me by typing \'menu\' to see your choices, or \'exit\' to quit: ');
-        //console.log('');
+        answer = consoleInput.askQuestion(consoleOutput.initQuestion());
         inputIsExit = await consoleInput.inputOptions(answer);
-        //console.log('\n');
     } while(inputIsExit == false);
 }
 
