@@ -19,6 +19,7 @@
   "homepage": "https://github.com/jfeng2542/zendesk-coding-challenge#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
+    "fetch-headers": "^2.0.0",
     "node-fetch": "^2.6.1",
     "readline-sync": "^1.4.10"
   }
