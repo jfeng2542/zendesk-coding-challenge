@@ -59,7 +59,7 @@ class requester {
                 case 401:
                     throw err + 'Wait, that\'s an \'Error ' + response.status + '\'...you\'re not authorized to be here! SECURITY!';
                 case 404:
-                    throw err + 'Oof, sorry, that\'s an \'Error ' + response.status + '\'. Your ticket is as real as me. It isn\'t.';
+                    throw err + 'Oof, an \'Error ' + response.status + '\'. The ticket you\'re looking for is currently unavailable.';
                 default:
                     throw err + 'Woah, I just caught an error, but I\'m not exactly sure what caused it...What did you do?';
             }
