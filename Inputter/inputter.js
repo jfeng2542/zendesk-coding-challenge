@@ -8,7 +8,7 @@ class inputter {
     constructor(TicketRequest, ConsoleOutput) {
         this.ticketRequest = TicketRequest;
         this.consoleOutput = ConsoleOutput;
-        this.pages = new Array(3);  // Will be an array that includes the previous, current, and next page
+        this.page;      // Will represent all the tickets on a current page
     }
 
     /*
@@ -36,16 +36,16 @@ class inputter {
                 break;
             case '1':
                 url = 'https://zccjef223.zendesk.com/api/v2/tickets.json?page[size]=25';
-                this.pages = await this.ticketRequest.requestAllTickets(url);
+                this.page = await this.ticketRequest.requestOnePage(url, this.page);    // If success, page initialized w/ url data
                 do {
                     answer = this.askQuestion(this.consoleOutput.allTicketsQuestions());
                     inputIsStop = await this.paginationInputOptions(answer);
                 } while(inputIsStop == false);
                 break;
             case '2':
-                url = 'https://zccjef223.zendesk.com/api/v2/tickets/';
-                idTicket = this.askQuestion(this.consoleOutput.idQuestion());
-                await this.ticketRequest.requestOneTicket(url, idTicket);
+                idTicket = this.askQuestion(this.consoleOutput.idQuestion());           // Add ID to url before ticket request
+                url = 'https://zccjef223.zendesk.com/api/v2/tickets/' + idTicket + '.json';
+                await this.ticketRequest.requestOneTicket(url);
                 break;
             case 'exit':
                 inputIsExit = true;
@@ -67,14 +67,10 @@ class inputter {
 
         switch(answer) {
             case 'prev':
-                if(this.pages[0].tickets.length == 0) this.consoleOutput.pageDoesNotExist();
-                // Else, send previous page's url to fetch again
-                else this.pages = await this.ticketRequest.requestAllTickets(this.pages[1].links.prev);
+                this.page = await this.ticketRequest.requestOnePage(this.page.links.prev, this.page);
                 break;
             case 'next':
-                if(this.pages[2].tickets.length == 0) this.consoleOutput.pageDoesNotExist();
-                // Else, send next page's url to fetch again
-                else this.pages = await this.ticketRequest.requestAllTickets(this.pages[1].links.next);
+                this.page = await this.ticketRequest.requestOnePage(this.page.links.next, this.page);
                 break;
             case 'stop':
                 this.consoleOutput.leavePaginationMenu();
