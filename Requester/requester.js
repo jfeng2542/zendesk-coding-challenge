@@ -17,60 +17,32 @@ class requester {
      *  Gets a ticket with a specific ID
      *  @param user-requested ticket ID
      */
-    async requestOneTicket(urlFirstPart, ticket_id) {
-        await fetch(urlFirstPart + ticket_id + '.json', { headers: this.authHeader })
-        .then(this.errorCheck)  // References errorCheck with the fetch response instead of calling the function
+    async requestOneTicket(url) {
+        await fetch(url, { headers: this.authHeader })
+        .then(this.errorCheck)      // References errorCheck with the fetch response instead of calling the function
         .then(response => response.json())
         .then(data => this.consoleOutput.ticketPrinter(data.ticket.id, data.ticket.subject, data.ticket.description))
         .catch(err => console.error(err));
     }
 
     /*
-     *  Gets all the tickets and pages through 25 tickets
-     *  @param url that returns the first 25 tickets
-     *  @return array that includes the previous, current, and next page, respectively
+     *  Gets all the tickets on one page, in which one page is a max of 25 tickets
+     *  @param url that returns a specific set of tickets
+     *  @return page that includes all of the current tickets
      */
-    async requestAllTickets(url) {
-        let prevLink, nextLink;
-        let pages;
-
+    async requestOnePage(url, page) {
         await fetch(url, { headers: this.authHeader })
         .then(this.errorCheck)
         .then(response => response.json())
-        .then(async(data) => {
-            prevLink = data.links.prev;
-            nextLink = data.links.next;
-            pages = await this.fetchPages(prevLink, nextLink);  // Initializes 'pages' as an array
-            pages[1] = data;                                    // 2nd index will hold current page data
-            data.tickets.map(ticket => this.consoleOutput.ticketPrinter(ticket.id, ticket.subject, ticket.description));
+        .then(data => {             // If no tickets on the page, the page doesn't exist
+            if(data.tickets.length == 0) this.consoleOutput.pageDoesNotExist();
+            else {                  // Else, the page does exist, so give the the new fetched data to current page
+                page = data;
+                this.consoleOutput.allTicketsPrinter(page.tickets);
+            }
         })
         .catch(err => console.error(err));
-
-        return pages;
-    }
-
-    /*
-     *  Loads the previous and next page to be checked if they exist and if they can be used in the menu
-     *  @param links to the previous and next page
-     *  @return array that includes the previous page and next page data
-     */
-    async fetchPages(prevLink, nextLink) {
-        let urls = [prevLink, nextLink];
-        let jsonPages = new Array(3);
-
-        await Promise.all(urls.map(
-            url => fetch(url, { headers: this.authHeader })
-        .then(this.errorCheck)))
-        .then(async(responses) => await Promise.all(
-            responses.map(response => response.json())
-        ))
-        .then(jsons => {
-            jsonPages[0] = jsons[0];    // fetchs previous page data into 1st index
-            jsonPages[2] = jsons[1];    // fetchs next page data into 3rd index
-        })
-        .catch(err => console.error(err));
-
-        return jsonPages;
+        return page;                // If requested page didn't exist, return original value of page
     }
 
     /*
@@ -79,17 +51,17 @@ class requester {
      *  @return fetch response
      */
     errorCheck(response) {
-        let errtxt = '\x1b[1m\x1b[31m';     // Sets the color format for errors
+        let err = '\x1b[1m\x1b[31m';     // Sets the color format for errors
         if(!response.ok) {
             switch(response.status) {
                 case 400:
-                    throw errtxt + 'Bud, that\'s an \'Error ' + response.status + '\'. I don\'t accept these kinds of ticket IDs. SECURITY!';
+                    throw err + 'Bud, that\'s an \'Error ' + response.status + '\'. I don\'t accept these kinds of ticket IDs.';
                 case 401:
-                    throw errtxt + 'Wait, that\'s an \'Error ' + response.status + '\'...you\'re not authorized to be here! SECURITY!';
+                    throw err + 'Wait, that\'s an \'Error ' + response.status + '\'...you\'re not authorized to be here! SECURITY!';
                 case 404:
-                    throw errtxt + 'Oof, sorry, that\'s an \'Error ' + response.status + '\'. Your ticket is not real, just like me...';
+                    throw err + 'Oof, sorry, that\'s an \'Error ' + response.status + '\'. Your ticket is as real as me. It isn\'t.';
                 default:
-                    throw errtxt + 'Woah, I just caught an error, but I\'m not exactly sure what caused it...What did you do?';
+                    throw err + 'Woah, I just caught an error, but I\'m not exactly sure what caused it...What did you do?';
             }
         }
         else return response;

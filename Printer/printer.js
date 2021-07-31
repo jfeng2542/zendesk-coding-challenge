@@ -1,5 +1,3 @@
-// We're gonna have such cool messages here hehehe
-
 /*
 *  This class formats messages to be printed in the CLI
 */
@@ -41,13 +39,17 @@ class printer {
         this.print(msg);
     }
 
+    allTicketsPrinter(tickets) {
+        tickets.map(ticket => this.ticketPrinter(ticket.id, ticket.subject, ticket.description));
+    }
+
     idQuestion() {
         return '\x1b[1m\x1b[32mType in an ID: \x1b[0m';
     }
 
     allTicketsQuestions() {
         let msg;
-    
+
         switch(this.allTktsCount) {
             case 0:
                 msg = '\n\x1b[0m(Sam thinks to himself: \x1b[32m\'teeheehee prepare to face my pun-believable puns!!!\'\x1b[0m)'
