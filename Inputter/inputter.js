@@ -26,7 +26,7 @@ class inputter {
      *  @return true/false if the user typed 'exit'
      */
     async inputOptions(answer) {
-        let inputIsExit = false, inputIsStop = false;
+        let inputIsExit = false, inputIsStop = false, inPageMenu = false;
         let idTicket;
         let url;
 
@@ -52,7 +52,7 @@ class inputter {
                 this.consoleOutput.goodbye();
                 break;             
             default:
-                this.consoleOutput.sorry();
+                this.consoleOutput.sorry(inPageMenu);
         }
         return inputIsExit;
     }
@@ -63,7 +63,7 @@ class inputter {
      *  @return true/false if the user typed 'stop'
      */
     async paginationInputOptions(answer) {
-        let inputIsStop = false;
+        let inputIsStop = false, inPageMenu = true;
 
         switch(answer) {
             case 'prev':
@@ -81,7 +81,7 @@ class inputter {
                 inputIsStop = true;
                 break;
             default:
-                this.consoleOutput.sorry();
+                this.consoleOutput.sorry(inPageMenu);
         }
         return inputIsStop;
     }

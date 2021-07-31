@@ -36,8 +36,8 @@ class printer {
     }
 
     ticketPrinter(id, subj, desc) {
-        let msg = '\x1b[1m\x1b[32mID: ' + id + '\t\x1b[33mSubject: ' + subj.padEnd(50)
-        + '\x1b[37mDescription: ' + desc.replace(/(\r\n|\n|\r)/gm," ").substring(0,50) + '...';
+        let msg = '\x1b[1m\x1b[32mID: ' + id + '\t\x1b[0m\x1b[33mSubject: ' + subj.padEnd(50)
+        + '\x1b[1m\x1b[37mDescription: ' + desc.replace(/(\r\n|\n|\r)/gm," ").substring(0,50) + '...';
         this.print(msg);
     }
 
@@ -58,18 +58,20 @@ class printer {
             case 1:
                 msg = '\n\x1b[1m\x1b[34mWow, that\'s tiring...You might not know but there\'s a '
                 + 'LOT of heavy work being done behind the scenes to get you these tickets. It ain\'t easy. '
-                + '\nAnyway, your call. \x1b[37m\'prev\', \'next\', or \'stop\': \x1b[0m';
+                + '\nAnyway, your call. \x1b[37m\'prev\'\x1b[34m, \x1b[37m\'next\'\x1b[34m, or \x1b[37m\'stop\': \x1b[0m';
                 this.allTktsCount++;
                 break;
             case 2:
                 msg = '\n\x1b[0m\x1b[1m*huff* *huff* *puff*\x1b[35m Okay...I\'ll be honest...you\'re really pushing it. '
                 + '\x1b[37m*puuufffff*\x1b[35m Are you...satisfied with...all these...tickets yet? \x1b[37m*PUUUFFFF*'
-                + '\n\x1b[35mAt your...command, though...\x1b[37m\'prev\', \'next\', or \'stop\': \x1b[0m';
+                + '\n\x1b[35mAt your...command, though...\x1b[37m\'prev\'\x1b[35m, \x1b[37m\'next\'\x1b[35m, '
+                + 'or \x1b[31mSTO-\x1b[35mI mean...\x1b[37m\'stop\': \x1b[0m';
                 this.allTktsCount++;
                 break;
             default:
                 msg = '\n\x1b[0m\x1b[1m*pant* *pant* *pant*\x1b[31m ...please... \x1b[37m*pant* *pant*\x1b[31m ...STOP! '
                 + '\x1b[37m*pant* \x1b[31mInput... \x1b[37m*pant*\x1b[31m ...here: \x1b[0m';
+                this.allTktsCount = 4;  // Sets value to not trigger any previous cases
         }
         return msg;
     }
@@ -83,7 +85,7 @@ class printer {
 
     pageDoesNotExist() {
         let msg;
-        if(this.allTktsCount < 3) {
+        if(this.allTktsCount < 3) {     // Does not change the message if user types 'prev' or 'next'
             msg = '\x1b[1m\x1b[35m\nSorry, this page doesn\'t exist :/';
             this.allTktsCount--;
         }
@@ -91,9 +93,10 @@ class printer {
         this.print(msg);
     }
 
-    sorry() {
-        let msg = '\x1b[1m\x1b[31mSorry, I don\'t know what you just said. I tend to forget words I used to know a minute ago...'
+    sorry(inPageMenu) {
+        let msg = '\x1b[1m\x1b[35mSorry, I don\'t know what you just said. I tend to forget words I used to know a minute ago...'
         + '\n...I need to go back to school...';
+        if(inPageMenu && this.allTktsCount < 4) this.allTktsCount--;    // Does not change message if user types an incorrect input
         this.print(msg);
     }
 

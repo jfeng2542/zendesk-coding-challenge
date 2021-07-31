@@ -40,8 +40,8 @@ class requester {
         .then(async(data) => {
             prevLink = data.links.prev;
             nextLink = data.links.next;
-            pages = await this.linkCheck(prevLink, nextLink);
-            pages[1] = data;    // After 'pages' is initialized with prev & next pages, the 2nd index will hold current page data
+            pages = await this.fetchPages(prevLink, nextLink);  // Initializes 'pages' as an array
+            pages[1] = data;                                    // 2nd index will hold current page data
             data.tickets.map(ticket => this.consoleOutput.ticketPrinter(ticket.id, ticket.subject, ticket.description));
         })
         .catch(err => console.error(err));
@@ -54,7 +54,7 @@ class requester {
      *  @param links to the previous and next page
      *  @return array that includes the previous page and next page data
      */
-    async linkCheck(prevLink, nextLink) {
+    async fetchPages(prevLink, nextLink) {
         let urls = [prevLink, nextLink];
         let jsonPages = new Array(3);
 
@@ -65,8 +65,8 @@ class requester {
             responses.map(response => response.json())
         ))
         .then(jsons => {
-            jsonPages[0] = jsons[0];    // Stores previous page data into 1st index
-            jsonPages[2] = jsons[1];    // Stores next page data into 3rd index
+            jsonPages[0] = jsons[0];    // fetchs previous page data into 1st index
+            jsonPages[2] = jsons[1];    // fetchs next page data into 3rd index
         })
         .catch(err => console.error(err));
 
@@ -79,17 +79,17 @@ class requester {
      *  @return fetch response
      */
     errorCheck(response) {
-        console.log('\x1b[1m\x1b[31m');     // Sets the color format for errors
+        let errtxt = '\x1b[1m\x1b[31m';     // Sets the color format for errors
         if(!response.ok) {
             switch(response.status) {
                 case 400:
-                    throw 'Bud, that\'s an \'Error ' + response.status + '\'. I don\'t accept these kinds of ticket IDs. SECURITY!';
+                    throw errtxt + 'Bud, that\'s an \'Error ' + response.status + '\'. I don\'t accept these kinds of ticket IDs. SECURITY!';
                 case 401:
-                    throw 'Wait, that\'s an \'Error ' + response.status + '\'...you\'re not authorized to be here! SECURITY!';
+                    throw errtxt + 'Wait, that\'s an \'Error ' + response.status + '\'...you\'re not authorized to be here! SECURITY!';
                 case 404:
-                    throw 'Oof, sorry, that\'s an \'Error ' + response.status + '\'. Your ticket is not real, like my existence...';
+                    throw errtxt + 'Oof, sorry, that\'s an \'Error ' + response.status + '\'. Your ticket is not real, just like me...';
                 default:
-                    throw 'Woah, I just caught an error, but I\'m not exactly sure what caused it...What did you do?';
+                    throw errtxt + 'Woah, I just caught an error, but I\'m not exactly sure what caused it...What did you do?';
             }
         }
         else return response;
