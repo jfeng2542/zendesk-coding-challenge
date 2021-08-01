@@ -13,9 +13,11 @@ describe('requester tests', () => {
     })
 
     it('should send a message stating that the page doesn\'t exist', async() => {
+        let page;
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
-        await ticketRequest.requestOnePage('https://zccjef223.zendesk.com/api/v2/tickets.json?page%5Bbefore%5D=eyJvIjoibmljZV9pZCIsInYiOiJhUUVBQUFBQUFBQUEifQ%3D%3D&page%5Bsize%5D=25');
+        page = await ticketRequest.requestOnePage('https://zccjef223.zendesk.com/api/v2/tickets.json?page%5Bbefore%5D=eyJvIjoibmljZV9pZCIsInYiOiJhUUVBQUFBQUFBQUEifQ%3D%3D&page%5Bsize%5D=25');
+        expect(page).toBeUndefined();           // If page doesn't exist, requestOnePage() returns an undefined page
     })
 
     it('should trigger an error 401 for unauthorization', async() => {
@@ -23,6 +25,7 @@ describe('requester tests', () => {
         const consoleOutput = new printer();
         const ticketRequest = new requester('bad token', consoleOutput);
         page = await ticketRequest.requestOnePage('https://zccjef223.zendesk.com/api/v2/tickets.json?page[size]=25', page);
+        expect(page).toBeUndefined();           // If there's an error, requestOnePage() doesn't return a value for page
     })
 
     // Tests for fetching a ticket by ID
