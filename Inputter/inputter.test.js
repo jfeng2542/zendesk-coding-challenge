@@ -3,18 +3,6 @@ const requester = require('../Requester/requester.js');
 const inputter = require('./inputter.js');
 const { TOKEN } = require('../token.js');
 
-/*
-global.fetch = jest.fn(() =>
-    Promise.resolve({
-        json: () => Promise.resolve({ data })
-    })
-);
-
-beforeEach(() => {
-    fetch.mockClear();
-});
-*/
-
 describe('inputter tests', () => {
     // Tests for initial/first menu options
     it('should return the menu', () => {
@@ -25,6 +13,7 @@ describe('inputter tests', () => {
     })
 
     it('should send user to an interactive all-tickets page menu', async() => {
+        // Also tests out 'prev', 'next', and other all-tickets menu options
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         const consoleInput = new inputter(ticketRequest, consoleOutput);
@@ -64,8 +53,21 @@ describe('inputter tests', () => {
     // Tests for all-tickets menu
     it('should request for the previous page of the current all-tickets page', async() => {
         // This test can only be performed under the assumption that the user has already loaded one of the all-tickets pages
-        
-    })
+        const consoleOutput = new printer();
+        const ticketRequest = new requester(TOKEN, consoleOutput);
+        const consoleInput = new inputter(ticketRequest, consoleOutput);
+        await consoleInput.inputOptions('1');   // Enter 'stop' to allow the 'prev' page test to take place
+        await consoleInput.paginationInputOptions('prev');
+    }, 10000)
+
+    it('should request for the next page of the current all-tickets page', async() => {
+        // This test can only be performed under the assumption that the user has already loaded one of the all-tickets pages
+        const consoleOutput = new printer();
+        const ticketRequest = new requester(TOKEN, consoleOutput);
+        const consoleInput = new inputter(ticketRequest, consoleOutput);
+        await consoleInput.inputOptions('1');   // Enter 'stop' to allow the 'next' page test to take place
+        await consoleInput.paginationInputOptions('next');
+    }, 10000)
 
     it('should send a menu exit message', () => {
         const consoleOutput = new printer();
