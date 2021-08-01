@@ -12,13 +12,13 @@ describe('requester tests', () => {
         expect(page.tickets).toBeTruthy();      // As long as if tickets are returned, toBeTruthy() returns true
     })
 
-    it('should return a statement saying the page doesn\'t exist', async() => {
+    it('should send a message stating that the page doesn\'t exist', async() => {
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         await ticketRequest.requestOnePage('https://zccjef223.zendesk.com/api/v2/tickets.json?page%5Bbefore%5D=eyJvIjoibmljZV9pZCIsInYiOiJhUUVBQUFBQUFBQUEifQ%3D%3D&page%5Bsize%5D=25');
     })
 
-    it('should return an error 401 for unauthorization', async() => {
+    it('should trigger an error 401 for unauthorization', async() => {
         let page;
         const consoleOutput = new printer();
         const ticketRequest = new requester('bad token', consoleOutput);
@@ -26,25 +26,25 @@ describe('requester tests', () => {
     })
 
     // Tests for fetching a ticket by ID
-    it('should return a ticket of ID 1', async() => {
+    it('should print information about ticket of ID 1', async() => {
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         await ticketRequest.requestOneTicket('https://zccjef223.zendesk.com/api/v2/tickets/1.json');
     })
 
-    it('should return an error 400 for an invalid ID', async() => {
+    it('should trigger an error 400 for an invalid ID', async() => {
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         await ticketRequest.requestOneTicket('https://zccjef223.zendesk.com/api/v2/tickets/-1.json');
     })
 
-    it('should return an error 401 for unauthorization', async() => {
+    it('should trigger an error 401 for unauthorization', async() => {
         const consoleOutput = new printer();
         const ticketRequest = new requester('bad token', consoleOutput);
         await ticketRequest.requestOneTicket('https://zccjef223.zendesk.com/api/v2/tickets/1.json');
     })
 
-    it('should return an error 404 for a ID that is valid but does not exist', async() => {
+    it('should trigger an error 404 for a ID that is valid but does not exist', async() => {
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         await ticketRequest.requestOneTicket('https://zccjef223.zendesk.com/api/v2/tickets/1000.json');
