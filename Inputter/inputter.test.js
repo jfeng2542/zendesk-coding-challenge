@@ -51,23 +51,22 @@ describe('inputter tests', () => {
     })
 
     // Tests for all-tickets menu
-    it('should request for the previous page of the current all-tickets page', async() => {
-        // This test can only be performed under the assumption that the user has already loaded one of the all-tickets pages
+    it('should return an error for requesting a \'prev\' page', async() => {
+        // paginationInputOptions() should not be called before inputOptions() by the user.
+        // This test checks if errors are thrown properly
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         const consoleInput = new inputter(ticketRequest, consoleOutput);
-        await consoleInput.inputOptions('1');   // Enter 'stop' to allow the 'prev' page test to take place
         await consoleInput.paginationInputOptions('prev');
-    }, 10000)
+    })
 
-    it('should request for the next page of the current all-tickets page', async() => {
-        // This test can only be performed under the assumption that the user has already loaded one of the all-tickets pages
+    it('should return an error for requesting a \'next\' page', async() => {
+        // Same scenario as previous test
         const consoleOutput = new printer();
         const ticketRequest = new requester(TOKEN, consoleOutput);
         const consoleInput = new inputter(ticketRequest, consoleOutput);
-        await consoleInput.inputOptions('1');   // Enter 'stop' to allow the 'next' page test to take place
         await consoleInput.paginationInputOptions('next');
-    }, 10000)
+    })
 
     it('should send a menu exit message', () => {
         const consoleOutput = new printer();

@@ -65,19 +65,24 @@ class inputter {
     async paginationInputOptions(answer) {
         let inputIsStop = false, inPageMenu = true;
 
-        switch(answer) {
-            case 'prev':
-                this.page = await this.ticketRequest.requestOnePage(this.page.links.prev, this.page);
-                break;
-            case 'next':
-                this.page = await this.ticketRequest.requestOnePage(this.page.links.next, this.page);
-                break;
-            case 'stop':
-                this.consoleOutput.leavePaginationMenu();
-                inputIsStop = true;
-                break;
-            default:
-                this.consoleOutput.sorry(inPageMenu);
+        try {
+            switch(answer) {
+                case 'prev':
+                    this.page = await this.ticketRequest.requestOnePage(this.page.links.prev, this.page);
+                    break;
+                case 'next':
+                    this.page = await this.ticketRequest.requestOnePage(this.page.links.next, this.page);
+                    break;
+                case 'stop':
+                    this.consoleOutput.leavePaginationMenu();
+                    inputIsStop = true;
+                    break;
+                default:
+                    this.consoleOutput.sorry(inPageMenu);
+            }
+        } catch(err) {
+            console.error('\x1b[1m\x1b[31mHey, don\'t call paginationInputOptions() like that.'
+            + 'You have to start at inputOptions() and input \'1\'. Don\'t destroy my system, please. :)');
         }
         return inputIsStop;
     }
