@@ -11,7 +11,7 @@ class printer {
     }
 
     intro() {
-        let msg = `
+        let msg = `\x1b[1m\x1b[32m
         x---------------x
         |    O     O    |
         |   _________   |
