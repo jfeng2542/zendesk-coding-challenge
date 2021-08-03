@@ -9,11 +9,12 @@ Required modules:
 ```
 git clone https://github.com/jfeng2542/zendesk-coding-challenge.git
 ```
-2. Open a terminal and run the following command
+2. Make sure that the .env file is within the same directory that you cloned the project on<br /><br />
+3. Open a terminal and run the following command
 ```
 npm install
 ```
-3. Enter the following command to run the program
+4. Enter the following command to run the program
 ```
 npm start
 ```
